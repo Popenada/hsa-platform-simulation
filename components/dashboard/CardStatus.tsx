@@ -41,22 +41,11 @@ export default function CardStatus({ accountId, card, onIssue }: Props) {
   if (card) {
     const last4 = card.cardNumber.slice(-4);
     return (
-      <div className="flex flex-col gap-1">
-        <div className="flex items-center justify-between rounded-md bg-muted px-3 py-2 text-sm">
-          <span className="font-mono">•••• •••• •••• {last4}</span>
-          <span className="text-xs text-muted-foreground capitalize">
-            {card.status}
-          </span>
-        </div>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleIssue}
-          disabled={issuing}
-        >
-          {issuing ? "Testing..." : "Test: try issuing another card"}
-        </Button>
-        {error && <p className="text-sm text-destructive">{error}</p>}
+      <div className="flex items-center justify-between rounded-md bg-muted px-3 py-2 text-sm">
+        <span className="font-mono">•••• •••• •••• {last4}</span>
+        <span className="text-xs text-muted-foreground capitalize">
+          {card.status}
+        </span>
       </div>
     );
   }
