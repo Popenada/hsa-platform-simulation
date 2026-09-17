@@ -15,7 +15,7 @@ export async function POST(request: Request) {
   }
 
   const { accountId, merchantCategory, amount } = result.data;
-
+  // 
   if (!isQualifiedExpense(merchantCategory)) {
     return NextResponse.json({
       status: "declined",
@@ -24,7 +24,7 @@ export async function POST(request: Request) {
   }
 
   const supabase = createServerSupabaseClient();
-
+  // RPC function to process transactions on Supabase server side concurrently
   const { data, error } = await supabase
     .rpc("process_transaction", {
       p_account_id: accountId,
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
       p_merchant_category: merchantCategory,
     })
     .single();
-
+  // Supabase error code saying declined due no row being detected
   if (error) {
     if (error.code === "PGRST116") {
       return NextResponse.json({
@@ -51,7 +51,7 @@ export async function POST(request: Request) {
     acct_balance: number;
     acct_created_at: string;
   };
-
+  // Payload from app sent to Supabase
   return NextResponse.json({
     status: "approved",
     transaction: {

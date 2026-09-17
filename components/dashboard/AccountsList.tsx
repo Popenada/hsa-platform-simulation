@@ -8,6 +8,7 @@ import AddAccountDialog from "@/components/dashboard/AddAccountDialog";
 import DepositDialog from "@/components/dashboard/DepositDialog";
 import CardStatus from "@/components/dashboard/CardStatus";
 import SimulateTransactionDialog from "@/components/dashboard/SimulateTransactionDialog";
+import ConcurrencyTestDialog from "@/components/dashboard/ConcurrencyTestDialog";
 
 type Props = {
   accounts: HsaAccount[];
@@ -55,6 +56,10 @@ export default function AccountsList({
                 onIssue={onIssueCard}
               />
               <SimulateTransactionDialog
+                account={account}
+                onSimulate={onSimulateTransaction}
+              />
+              <ConcurrencyTestDialog
                 account={account}
                 onSimulate={onSimulateTransaction}
               />
