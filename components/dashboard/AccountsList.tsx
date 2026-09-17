@@ -1,20 +1,26 @@
 "use client";
 
 import { HsaAccount } from "@/lib/mock-accounts";
+import { HsaCard } from "@/lib/mock-cards";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import AddAccountDialog from "@/components/dashboard/AddAccountDialog";
 import DepositDialog from "@/components/dashboard/DepositDialog";
+import CardStatus from "@/components/dashboard/CardStatus";
 
 type Props = {
   accounts: HsaAccount[];
+  cards: Record<string, HsaCard>;
   onAddAccount: (account: HsaAccount) => void;
   onDeposit: (account: HsaAccount) => void;
+  onIssueCard: (card: HsaCard) => void;
 };
 
 export default function AccountsList({
   accounts,
+  cards,
   onAddAccount,
   onDeposit,
+  onIssueCard,
 }: Props) {
   return (
     <div className="flex flex-col gap-4">
@@ -39,6 +45,11 @@ export default function AccountsList({
                 Opened {account.createdAt}
               </p>
               <DepositDialog account={account} onDeposit={onDeposit} />
+              <CardStatus
+                accountId={account.id}
+                card={cards[account.id]}
+                onIssue={onIssueCard}
+              />
             </CardContent>
           </Card>
         ))}

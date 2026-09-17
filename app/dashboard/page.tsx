@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { HsaAccount, mockAccounts } from "@/lib/mock-accounts";
+import { HsaCard } from "@/lib/mock-cards";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import AccountsList from "@/components/dashboard/AccountsList";
@@ -12,6 +13,7 @@ export default function DashboardPage() {
   const router = useRouter();
   const [username, setUsername] = useState<string | null>(null);
   const [accounts, setAccounts] = useState<HsaAccount[]>(mockAccounts);
+  const [cards, setCards] = useState<Record<string, HsaCard>>({});
 
   useEffect(() => {
     const user = localStorage.getItem("hsa_user");
@@ -30,11 +32,15 @@ export default function DashboardPage() {
   function handleAddAccount(account: HsaAccount) {
     setAccounts((prev) => [...prev, account]);
   }
-
+  // Adding deposit amount by replacing account with updated balance
   function handleDeposit(updated: HsaAccount) {
     setAccounts((prev) =>
       prev.map((account) => (account.id === updated.id ? updated : account))
     );
+  }
+
+  function handleIssueCard(card: HsaCard) {
+    setCards((prev) => ({ ...prev, [card.accountId]: card }));
   }
 
   if (!username) return null;
@@ -65,8 +71,10 @@ export default function DashboardPage() {
         <TabsContent value="accounts">
           <AccountsList
             accounts={accounts}
+            cards={cards}
             onAddAccount={handleAddAccount}
             onDeposit={handleDeposit}
+            onIssueCard={handleIssueCard}
           />
         </TabsContent>
 
