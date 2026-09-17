@@ -31,6 +31,12 @@ export default function DashboardPage() {
     setAccounts((prev) => [...prev, account]);
   }
 
+  function handleDeposit(updated: HsaAccount) {
+    setAccounts((prev) =>
+      prev.map((account) => (account.id === updated.id ? updated : account))
+    );
+  }
+
   if (!username) return null;
 
   return (
@@ -57,7 +63,11 @@ export default function DashboardPage() {
         </TabsList>
 
         <TabsContent value="accounts">
-          <AccountsList accounts={accounts} onAddAccount={handleAddAccount} />
+          <AccountsList
+            accounts={accounts}
+            onAddAccount={handleAddAccount}
+            onDeposit={handleDeposit}
+          />
         </TabsContent>
 
         <TabsContent value="transactions">

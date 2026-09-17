@@ -15,7 +15,7 @@ export async function POST(request: Request) {
 
   const { fullName, dateOfBirth } = result.data;
   const supabase = createServerSupabaseClient();
-
+  // Insertion of Supabase data such as full name and date of birth into row table
   const { data, error } = await supabase
     .from("accounts")
     .insert({ full_name: fullName, date_of_birth: dateOfBirth, balance: 0 })
@@ -25,7 +25,7 @@ export async function POST(request: Request) {
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
-
+  // Mapping data objects to Supabase data rows
   return NextResponse.json(
     {
       id: data.id,
