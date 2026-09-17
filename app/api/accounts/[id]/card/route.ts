@@ -24,7 +24,7 @@ export async function POST(
     })
     .select()
     .single();
-  // Postgres rejection to account already having card 
+  // Postgres rejection to account already having card - code 23505 corresponds to Postgres "unique_violation"
   if (error) {
     if (error.code === "23505") {
       return NextResponse.json(

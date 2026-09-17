@@ -18,7 +18,7 @@ export async function POST(
   }
 
   const supabase = createServerSupabaseClient();
-
+  // RPC function from supabase to run the deposit funds function that updates from the Postgres table directly
   const { data, error } = await supabase
     .rpc("deposit_funds", { p_account_id: id, p_amount: result.data.amount })
     .single();
