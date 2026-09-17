@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { createHsaAccountSchema } from "@/lib/schemas/hsa-account";
+import { HsaAccount } from "@/lib/mock-accounts";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,7 +16,7 @@ import {
 } from "@/components/ui/dialog";
 
 type Props = {
-  onCreate: (input: { fullName: string; dateOfBirth: string }) => void;
+  onCreate: (account: HsaAccount) => void;
 };
 
 export default function AddAccountDialog({ onCreate }: Props) {
@@ -23,8 +24,9 @@ export default function AddAccountDialog({ onCreate }: Props) {
   const [fullName, setFullName] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitting, setSubmitting] = useState(false);
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     const result = createHsaAccountSchema.safeParse({ fullName, dateOfBirth });
@@ -39,10 +41,31 @@ export default function AddAccountDialog({ onCreate }: Props) {
     }
 
     setErrors({});
-    onCreate(result.data);
-    setFullName("");
-    setDateOfBirth("");
-    setOpen(false);
+    setSubmitting(true);
+
+    try {
+      const res = await fetch("/api/accounts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(result.data),
+      });
+
+      if (!res.ok) {
+        const body = await res.json().catch(() => null);
+        setErrors({ form: body?.error ?? "Failed to create account" });
+        return;
+      }
+
+      const account: HsaAccount = await res.json();
+      onCreate(account);
+      setFullName("");
+      setDateOfBirth("");
+      setOpen(false);
+    } catch {
+      setErrors({ form: "Failed to create account" });
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -79,10 +102,16 @@ export default function AddAccountDialog({ onCreate }: Props) {
                 <p className="text-sm text-destructive">{errors.dateOfBirth}</p>
               )}
             </div>
+
+            {errors.form && (
+              <p className="text-sm text-destructive">{errors.form}</p>
+            )}
           </div>
 
           <DialogFooter>
-            <Button type="submit">Create Account</Button>
+            <Button type="submit" disabled={submitting}>
+              {submitting ? "Creating..." : "Create Account"}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

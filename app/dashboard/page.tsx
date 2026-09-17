@@ -27,15 +27,8 @@ export default function DashboardPage() {
     [accounts]
   );
 
-  function handleAddAccount(input: { fullName: string; dateOfBirth: string }) {
-    const newAccount: HsaAccount = {
-      id: `acc_${Date.now()}`,
-      fullName: input.fullName,
-      dateOfBirth: input.dateOfBirth,
-      balance: 0,
-      createdAt: new Date().toISOString().slice(0, 10),
-    };
-    setAccounts((prev) => [...prev, newAccount]);
+  function handleAddAccount(account: HsaAccount) {
+    setAccounts((prev) => [...prev, account]);
   }
 
   if (!username) return null;

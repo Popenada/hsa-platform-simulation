@@ -6,7 +6,7 @@ import AddAccountDialog from "@/components/dashboard/AddAccountDialog";
 
 type Props = {
   accounts: HsaAccount[];
-  onAddAccount: (input: { fullName: string; dateOfBirth: string }) => void;
+  onAddAccount: (account: HsaAccount) => void;
 };
 
 export default function AccountsList({ accounts, onAddAccount }: Props) {
