@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+// 4 defined categories to match project examples 
 export const merchantCategorySchema = z.enum([
   "Pharmacy",
   "Hospital",

@@ -2,10 +2,12 @@
 
 import { HsaAccount } from "@/lib/mock-accounts";
 import { HsaCard } from "@/lib/mock-cards";
+import { Transaction } from "@/lib/mock-transactions";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import AddAccountDialog from "@/components/dashboard/AddAccountDialog";
 import DepositDialog from "@/components/dashboard/DepositDialog";
 import CardStatus from "@/components/dashboard/CardStatus";
+import SimulateTransactionDialog from "@/components/dashboard/SimulateTransactionDialog";
 
 type Props = {
   accounts: HsaAccount[];
@@ -13,6 +15,7 @@ type Props = {
   onAddAccount: (account: HsaAccount) => void;
   onDeposit: (account: HsaAccount) => void;
   onIssueCard: (card: HsaCard) => void;
+  onSimulateTransaction: (transaction: Transaction, account: HsaAccount) => void;
 };
 
 export default function AccountsList({
@@ -21,6 +24,7 @@ export default function AccountsList({
   onAddAccount,
   onDeposit,
   onIssueCard,
+  onSimulateTransaction,
 }: Props) {
   return (
     <div className="flex flex-col gap-4">
@@ -49,6 +53,10 @@ export default function AccountsList({
                 accountId={account.id}
                 card={cards[account.id]}
                 onIssue={onIssueCard}
+              />
+              <SimulateTransactionDialog
+                account={account}
+                onSimulate={onSimulateTransaction}
               />
             </CardContent>
           </Card>

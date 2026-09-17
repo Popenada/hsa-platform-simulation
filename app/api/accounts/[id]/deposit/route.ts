@@ -8,6 +8,7 @@ export async function POST(
 ) {
   const { id } = await params;
   const body = await request.json();
+  // Validate deposit schema
   const result = depositSchema.safeParse(body);
 
   if (!result.success) {
