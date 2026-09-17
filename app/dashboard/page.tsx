@@ -46,12 +46,12 @@ export default function DashboardPage() {
         Welcome, {username}
       </h1>
 
-      <Card className="w-fit">
-        <CardHeader>
-          <CardTitle>Money left to spend</CardTitle>
+      <Card>
+        <CardHeader className="items-center text-center">
+          <CardTitle>Available Balance</CardTitle>
         </CardHeader>
-        <CardContent>
-          <p className="text-3xl font-semibold text-foreground">
+        <CardContent className="flex justify-center">
+          <p className="text-5xl font-bold text-foreground">
             ${moneyLeftToSpend.toFixed(2)}
           </p>
         </CardContent>
