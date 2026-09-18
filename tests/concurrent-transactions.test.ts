@@ -2,11 +2,6 @@ import { describe, it, expect, beforeAll } from "vitest";
 
 // This is an integration test: it fires real HTTP requests at your actual
 // running dev server (`npm run dev`), which calls the real Supabase project.
-// It exists to prove the *database's* atomic balance guard actually holds
-// under a real race — a mocked test could never verify that, since the
-// guarantee lives entirely inside the Postgres `process_transaction`
-// function (an UPDATE ... WHERE balance >= amount, which takes a real row
-// lock), not in this app's own code.
 const BASE_URL = process.env.TEST_BASE_URL ?? "http://localhost:3000";
 
 async function createTestAccount() {
