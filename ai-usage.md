@@ -10,17 +10,17 @@ Claude Code (Claude Sonnet 5), used interactively inside the VS Code extension e
 - Scaffolding: shadcn/ui integration
 - Backend: API routes and Zod validation schema boilerplate
 - Database design: the Postgres schema and the two atomic functions (`deposit_funds`, `process_transaction`) that enforce the concurrency guarantee
-- Explaining new concepts along the way — for example, why RPC functions with an `UPDATE ... WHERE balance >= amount` guard are safe under concurrent requests, when a plain read-then-write in application code would not be
+- Explaining new concepts along the way. For example, why RPC functions with an `UPDATE ... WHERE balance >= amount` guard are safe under concurrent requests, when a plain read-then-write in application code would not be
 
 ## Representative Prompts/Workflows
 
-1. "Start building the route to Supabase API and validate the request schema before going to server side"
+1. "Write a Postgres function that atomically debits a balance only if sufficient funds exist, to prevent a race condition between concurrent requests"
 2. "Build a concurrent transactions simulator button that fires two concurrent transactions to Supabase using HTTP requests"
-3. "Build a virtual credit card issued to an HSA account limited to one or 0"
+3. "Build and wire a virtual credit card issued to an HSA account limited to one or 0"
 
 ## One Example Where AI Output Was Wrong, Incomplete, or Unhelpful
 
-When I wanted to verify the correctness of concurrent transaction handling, the AI defaulted to testing it itself with local `curl` commands. I stepped in and had it build an actual concurrent-transactions button in the UI instead, so a reviewer could see the constraint hold for themselves rather than trusting an AI-run test they can't see. For deeper verification, I also had it build a Vitest integration test suite that fires real concurrent HTTP requests at the dev server to prove the $80 + $50 against a $100 balance scenario resolves correctly every time.
+When I asked for state management for the dashboard, AI scaffolded a full React Context setup (a TransactionsContext provider, a useTransactions hook, and supporting files) to share account/card/transaction data across components. The app has one primary route with shallow prop-passing, not multiple unrelated components needing the same global state, and the data is server-backed (Supabase), not true client-only state a store pattern is meant for. I removed the Context files and used local useState at the dashboard page level instead, refetching after each mutation. The AI wasn't necessarily wrong but it was unhelpful because this would add another complexity layer which didn't match the scope of the project. 
 
 ## How I Validated the Final Implementation
 
