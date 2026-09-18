@@ -13,7 +13,11 @@ type AccountRow = {
   txn_card_id: string | null;
 };
 
-export async function POST(request: Request) {
+export async function POST(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
   const body = await request.json();
   const result = createTransactionSchema.safeParse(body);
 
@@ -24,7 +28,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const { accountId, merchantCategory, amount } = result.data;
+  const { merchantCategory, amount } = result.data;
   const supabase = createServerSupabaseClient();
 
   // Not a qualified expense: record the declined attempt for the audit
@@ -33,7 +37,7 @@ export async function POST(request: Request) {
     const reason = "Not a qualified medical expense";
     const { data, error } = await supabase
       .rpc("decline_transaction", {
-        p_account_id: accountId,
+        p_account_id: id,
         p_amount: amount,
         p_merchant_category: merchantCategory,
         p_reason: reason,
@@ -71,7 +75,7 @@ export async function POST(request: Request) {
   // declined "Insufficient funds" attempt if it doesn't fit).
   const { data, error } = await supabase
     .rpc("process_transaction", {
-      p_account_id: accountId,
+      p_account_id: id,
       p_amount: amount,
       p_merchant_category: merchantCategory,
     })

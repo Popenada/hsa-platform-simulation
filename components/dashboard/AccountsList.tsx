@@ -47,7 +47,12 @@ export default function AccountsList({
                 ${account.balance.toFixed(2)}
               </p>
               <p className="text-xs text-muted-foreground">
-                Opened {account.createdAt}
+                Opened{" "}
+                {new Date(account.createdAt).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })}
               </p>
               <DepositDialog account={account} onDeposit={onDeposit} />
               <CardStatus

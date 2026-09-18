@@ -38,11 +38,10 @@ async function simulateTransaction(
   amount: number,
   merchantCategory: string = "Pharmacy"
 ) {
-  const res = await fetch(`${BASE_URL}/api/transactions`, {
+  const res = await fetch(`${BASE_URL}/api/accounts/${accountId}/transactions`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      accountId,
       merchantCategory,
       amount,
     }),

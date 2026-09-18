@@ -55,7 +55,6 @@ export default function SimulateTransactionDialog({
     e.preventDefault();
 
     const parsed = createTransactionSchema.safeParse({
-      accountId: account.id,
       merchantCategory,
       amount,
     });
@@ -75,7 +74,7 @@ export default function SimulateTransactionDialog({
     setSubmitting(true);
 
     try {
-      const res = await fetch("/api/transactions", {
+      const res = await fetch(`/api/accounts/${account.id}/transactions`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(parsed.data),

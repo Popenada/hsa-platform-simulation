@@ -9,7 +9,6 @@ export const merchantCategorySchema = z.enum([
 ]);
 
 export const createTransactionSchema = z.object({
-  accountId: z.string().uuid("Invalid account id"),
   merchantCategory: merchantCategorySchema,
   amount: z.coerce.number().positive("Amount must be greater than 0"),
 });

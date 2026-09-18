@@ -58,12 +58,10 @@ export default function ConcurrencyTestDialog({ account, onSimulate }: Props) {
     e.preventDefault();
 
     const parsedA = createTransactionSchema.safeParse({
-      accountId: account.id,
       merchantCategory: txnA.merchantCategory,
       amount: txnA.amount,
     });
     const parsedB = createTransactionSchema.safeParse({
-      accountId: account.id,
       merchantCategory: txnB.merchantCategory,
       amount: txnB.amount,
     });
@@ -84,12 +82,12 @@ export default function ConcurrencyTestDialog({ account, onSimulate }: Props) {
 
     try {
       const [resA, resB] = await Promise.all([
-        fetch("/api/transactions", {
+        fetch(`/api/accounts/${account.id}/transactions`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(parsedA.data),
         }),
-        fetch("/api/transactions", {
+        fetch(`/api/accounts/${account.id}/transactions`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(parsedB.data),
