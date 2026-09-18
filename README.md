@@ -1,6 +1,6 @@
 # HSA Platform
 
-A simulated Health Savings Account (HSA) platform: create accounts, deposit funds, issue virtual debit cards, and process transactions against a qualified-medical-expense check — with concurrency-safe balance handling. Built with Next.js (App Router) and Supabase.
+A simulated Health Savings Account (HSA) platform: create accounts, deposit funds, issue virtual debit cards, and process transactions against a qualified-medical-expense check with concurrency-safe balance handling. Built with Next.js (App Router) and Supabase.
 
 See [architecture.md](architecture.md) for system design, data model, and concurrency handling, and [ai-usage.md](ai-usage.md) for how AI was used and verified during development.
 
@@ -30,7 +30,7 @@ NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 ```
 
-Both values are in your Supabase dashboard under **Project Settings → API**. Use the **`service_role`** (secret) key, not the `anon`/publishable one — the server needs it to write data without Row Level Security in place (see `architecture.md` for why).
+Both values are in your Supabase dashboard under **Project Settings → API**. Use the **`service_role`** (secret) key, not the `anon`/publishable one. The server needs it to write data without Row Level Security in place.
 
 ## 4. Run the app
 
@@ -40,7 +40,7 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000). If port 3000 is already in use on your machine, Next.js will pick another port automatically — check the terminal output for the actual URL.
 
-There's no login — the app opens straight to the dashboard.
+There's no login, the app opens straight to the dashboard.
 
 ## 5. Run the tests
 
@@ -57,7 +57,7 @@ This runs two suites:
 
 ## Demo Video
 
-[Link to demo video] — TODO: add once recorded.
+[\[Link to demo video\]](https://drive.google.com/file/d/1h2Efq9tGoXiQ7PkXz2UgWons8df41GXf/view?usp=sharing)
 
 ## Tech Stack
 

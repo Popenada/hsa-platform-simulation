@@ -24,4 +24,4 @@ When I asked for state management for the dashboard, AI scaffolded a full React 
 
 ## How I Validated the Final Implementation
 
-I used Vitest integration tests that fire concurrent requests against a real running dev server (not mocked) to confirm the balance-safety guarantee. I also manually walked through each UI flow in the browser after every feature was implemented, to confirm it behaved as intended and stayed within the project's scope. 
+I used Vitest integration tests that fire concurrent requests against a real running dev server (not mocked) to confirm the balance-safety guarantee. I also implemented a quick unit tests for qualified expenses matching categories of Pharmacy/Hospital and unallowed categories Restaurant/Electronics. I also manually walked through each UI flow in the browser after every feature was implemented, to confirm it behaved as intended and stayed within the project's scope. 
