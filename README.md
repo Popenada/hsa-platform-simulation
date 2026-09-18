@@ -1,8 +1,15 @@
+
+## Demo Video
+
+[\[Link to demo video\]](https://drive.google.com/file/d/1h2Efq9tGoXiQ7PkXz2UgWons8df41GXf/view?usp=sharing)
+
 # HSA Platform
 
 A simulated Health Savings Account (HSA) platform: create accounts, deposit funds, issue virtual debit cards, and process transactions against a qualified-medical-expense check with concurrency-safe balance handling. Built with Next.js (App Router) and Supabase.
 
 See [architecture.md](architecture.md) for system design, data model, and concurrency handling, and [ai-usage.md](ai-usage.md) for how AI was used and verified during development.
+
+
 
 ## Prerequisites
 
@@ -54,10 +61,6 @@ This runs two suites:
   ```bash
   TEST_BASE_URL=http://localhost:3001 npm test
   ```
-
-## Demo Video
-
-[\[Link to demo video\]](https://drive.google.com/file/d/1h2Efq9tGoXiQ7PkXz2UgWons8df41GXf/view?usp=sharing)
 
 ## Tech Stack
 
