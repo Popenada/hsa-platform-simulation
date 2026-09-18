@@ -25,8 +25,10 @@ Instead, both balance-changing operations are single atomic Postgres functions:
 
 1. **No authentication.** Deliberately scoped out to focus time on the core HSA/transaction/concurrency requirements.
 2. **Accounts aren't linked to a user.** Accounts aren't linked to a user, more focused onto the core features of project scope. Adding an authentication layer such as username and password would be the next evolution.
-3. **No `GET` routes.** All backend routes are write-only (`POST`). The frontend only knows about data created during the current browser session (held in `useState`), so refreshing the page loses the UI's view of it — though the underlying data is safely persisted in Supabase. Adding `GET /api/accounts` (and similar) plus a fetch-on-mount would close this gap.
-4. **Service role key bypasses Row Level Security entirely.** Acceptable with no real auth in place; would need real RLS policies + the anon/publishable key once auth exists.
-5. **Mock card numbers are stored in plaintext**, masked only at the UI layer — acceptable since these are fake numbers, not real payment data.
-6. **State management is local `useState`, not a global store.** Appropriate at the current scope (one primary route, shallow prop-passing), but would need revisiting if the app grows more routes that need the same data.
-7. **Qualified-expense categories are a hardcoded allowlist** (`Pharmacy`, `Hospital`) in `lib/qualified-expense.ts`, not configurable or database-driven. Real world applications would have some sort of classification engine for each individual product for HSA cards.
+3. **Service role key bypasses Row Level Security entirely.** Acceptable with no real auth in place; would need real RLS policies + the anon/publishable key once auth exists.
+4. **Mock card numbers are stored in plaintext**, masked only at the UI layer — acceptable since these are fake numbers, not real payment data.
+5. **State management is local `useState`, not a global store.** Appropriate at the current scope (one primary route, shallow prop-passing), but would need revisiting if the app grows more routes that need the same data.
+6. **Qualified-expense categories are a hardcoded allowlist** (`Pharmacy`, `Hospital`) in `lib/qualified-expense.ts`, not configurable or database-driven. Real world applications would have some sort of classification engine for each individual product for HSA cards.
+7. Removing HSA accounts that would allow deletion from reviewer side to server side data.
+8. No real payment integrations, adding only virtual cards for display purposes only and linking of transaction history.
+9. Only limiting one card per HSA account, usually for real world HSA application there would be option to add multiple cards under different names and relationships. (Cardholder, family member, spouse, or etc)
