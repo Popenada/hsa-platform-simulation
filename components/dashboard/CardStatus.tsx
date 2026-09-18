@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { HsaCard } from "@/lib/mock-cards";
+import { HsaCard } from "@/lib/types/card";
 import { Button } from "@/components/ui/button";
 
 type Props = {

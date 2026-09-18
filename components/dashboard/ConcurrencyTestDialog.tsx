@@ -5,8 +5,8 @@ import {
   createTransactionSchema,
   merchantCategorySchema,
 } from "@/lib/schemas/transaction";
-import { HsaAccount } from "@/lib/mock-accounts";
-import { Transaction, MerchantCategory } from "@/lib/mock-transactions";
+import { HsaAccount } from "@/lib/types/account";
+import { Transaction, MerchantCategory } from "@/lib/types/transaction";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -102,7 +102,7 @@ export default function ConcurrencyTestDialog({ account, onSimulate }: Props) {
       ]);
 
       for (const result of [bodyA, bodyB]) {
-        if (result?.status === "approved") {
+        if (result?.transaction && result?.account) {
           onSimulate(result.transaction, result.account);
         }
       }

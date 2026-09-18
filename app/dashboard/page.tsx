@@ -1,9 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { HsaAccount } from "@/lib/mock-accounts";
-import { HsaCard } from "@/lib/mock-cards";
-import { Transaction } from "@/lib/mock-transactions";
+import { useEffect, useMemo, useState } from "react";
+import { HsaAccount } from "@/lib/types/account";
+import { HsaCard } from "@/lib/types/card";
+import { Transaction } from "@/lib/types/transaction";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import AccountsList from "@/components/dashboard/AccountsList";
@@ -13,6 +13,18 @@ export default function DashboardPage() {
   const [accounts, setAccounts] = useState<HsaAccount[]>([]);
   const [cards, setCards] = useState<Record<string, HsaCard>>({});
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/accounts")
+      .then((res) => res.json())
+      .then((data) => {
+        setAccounts(data.accounts ?? []);
+        setCards(data.cards ?? {});
+        setTransactions(data.transactions ?? []);
+      })
+      .finally(() => setLoading(false));
+  }, []);
 
   const moneyLeftToSpend = useMemo(
     () => accounts.reduce((sum, account) => sum + account.balance, 0),
@@ -42,6 +54,14 @@ export default function DashboardPage() {
       prev.map((account) =>
         account.id === updatedAccount.id ? updatedAccount : account
       )
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="flex flex-1 items-center justify-center bg-zinc-50 p-6 dark:bg-black">
+        <p className="text-sm text-muted-foreground">Loading dashboard...</p>
+      </div>
     );
   }
 

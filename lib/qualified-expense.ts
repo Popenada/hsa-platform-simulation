@@ -1,4 +1,4 @@
-import { MerchantCategory } from "@/lib/mock-transactions";
+import { MerchantCategory } from "@/lib/types/transaction";
 
 const QUALIFIED_CATEGORIES: MerchantCategory[] = ["Pharmacy", "Hospital"];
 

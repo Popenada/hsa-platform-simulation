@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { createHsaAccountSchema } from "@/lib/schemas/hsa-account";
-import { HsaAccount } from "@/lib/mock-accounts";
+import { HsaAccount } from "@/lib/types/account";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

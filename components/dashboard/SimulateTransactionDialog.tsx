@@ -5,8 +5,8 @@ import {
   createTransactionSchema,
   merchantCategorySchema,
 } from "@/lib/schemas/transaction";
-import { HsaAccount } from "@/lib/mock-accounts";
-import { Transaction, MerchantCategory } from "@/lib/mock-transactions";
+import { HsaAccount } from "@/lib/types/account";
+import { Transaction, MerchantCategory } from "@/lib/types/transaction";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -89,9 +89,7 @@ export default function SimulateTransactionDialog({
       }
 
       setResult({ status: body.status, reason: body.reason });
-      if (body.status === "approved") {
-        onSimulate(body.transaction, body.account);
-      }
+      onSimulate(body.transaction, body.account);
     } catch {
       setErrors({ form: "Failed to process transaction" });
     } finally {

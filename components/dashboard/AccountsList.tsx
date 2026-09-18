@@ -1,8 +1,8 @@
 "use client";
 
-import { HsaAccount } from "@/lib/mock-accounts";
-import { HsaCard } from "@/lib/mock-cards";
-import { Transaction } from "@/lib/mock-transactions";
+import { HsaAccount } from "@/lib/types/account";
+import { HsaCard } from "@/lib/types/card";
+import { Transaction } from "@/lib/types/transaction";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import AddAccountDialog from "@/components/dashboard/AddAccountDialog";
 import DepositDialog from "@/components/dashboard/DepositDialog";

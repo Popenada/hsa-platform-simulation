@@ -1,9 +1,9 @@
 "use client";
 
 import { useMemo } from "react";
-import { Transaction } from "@/lib/mock-transactions";
-import { HsaAccount } from "@/lib/mock-accounts";
-import { HsaCard } from "@/lib/mock-cards";
+import { Transaction } from "@/lib/types/transaction";
+import { HsaAccount } from "@/lib/types/account";
+import { HsaCard } from "@/lib/types/card";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Table,
@@ -58,6 +58,8 @@ export default function RecentTransactions({
               <TableHead className="text-right">Amount</TableHead>
               <TableHead>Account</TableHead>
               <TableHead>Card</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Reason</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -76,6 +78,18 @@ export default function RecentTransactions({
                   <TableCell>{account?.fullName ?? transaction.accountId}</TableCell>
                   <TableCell className="font-mono">
                     {card ? `•••• ${card.cardNumber.slice(-4)}` : "No card"}
+                  </TableCell>
+                  <TableCell
+                    className={
+                      transaction.status === "approved"
+                        ? "text-foreground"
+                        : "text-destructive"
+                    }
+                  >
+                    {transaction.status}
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {transaction.reason ?? "-"}
                   </TableCell>
                 </TableRow>
               );
