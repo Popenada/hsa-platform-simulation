@@ -78,7 +78,11 @@ export default function DashboardPage() {
         </TabsContent>
 
         <TabsContent value="transactions">
-          <RecentTransactions transactions={transactions} />
+          <RecentTransactions
+            transactions={transactions}
+            accounts={accounts}
+            cards={cards}
+          />
         </TabsContent>
       </Tabs>
     </div>

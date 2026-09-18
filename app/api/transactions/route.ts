@@ -50,6 +50,7 @@ export async function POST(request: Request) {
     acct_date_of_birth: string;
     acct_balance: number;
     acct_created_at: string;
+    txn_card_id: string | null;
   };
   // Payload from app sent to Supabase
   return NextResponse.json({
@@ -57,6 +58,7 @@ export async function POST(request: Request) {
     transaction: {
       id: row.txn_id,
       accountId: row.acct_id,
+      cardId: row.txn_card_id,
       merchantCategory,
       amount,
     },

@@ -7,6 +7,7 @@ export type MerchantCategory =
 export type Transaction = {
   id: string;
   accountId: string;
+  cardId: string | null;
   merchantCategory: MerchantCategory;
   amount: number;
 };

@@ -1,4 +1,9 @@
+"use client";
+
+import { useMemo } from "react";
 import { Transaction } from "@/lib/mock-transactions";
+import { HsaAccount } from "@/lib/mock-accounts";
+import { HsaCard } from "@/lib/mock-cards";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Table,
@@ -11,9 +16,26 @@ import {
 
 type Props = {
   transactions: Transaction[];
+  accounts: HsaAccount[];
+  cards: Record<string, HsaCard>;
 };
 
-export default function RecentTransactions({ transactions }: Props) {
+export default function RecentTransactions({
+  transactions,
+  accounts,
+  cards,
+}: Props) {
+  const accountsById = useMemo(
+    () => Object.fromEntries(accounts.map((account) => [account.id, account])),
+    [accounts]
+  );
+
+  const cardsById = useMemo(
+    () =>
+      Object.fromEntries(Object.values(cards).map((card) => [card.id, card])),
+    [cards]
+  );
+
   if (transactions.length === 0) {
     return (
       <Card>
@@ -34,17 +56,30 @@ export default function RecentTransactions({ transactions }: Props) {
             <TableRow>
               <TableHead>Merchant Category</TableHead>
               <TableHead className="text-right">Amount</TableHead>
+              <TableHead>Account</TableHead>
+              <TableHead>Card</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {transactions.map((transaction) => (
-              <TableRow key={transaction.id}>
-                <TableCell>{transaction.merchantCategory}</TableCell>
-                <TableCell className="text-right">
-                  ${transaction.amount.toFixed(2)}
-                </TableCell>
-              </TableRow>
-            ))}
+            {transactions.map((transaction) => {
+              const account = accountsById[transaction.accountId];
+              const card = transaction.cardId
+                ? cardsById[transaction.cardId]
+                : undefined;
+
+              return (
+                <TableRow key={transaction.id}>
+                  <TableCell>{transaction.merchantCategory}</TableCell>
+                  <TableCell className="text-right">
+                    ${transaction.amount.toFixed(2)}
+                  </TableCell>
+                  <TableCell>{account?.fullName ?? transaction.accountId}</TableCell>
+                  <TableCell className="font-mono">
+                    {card ? `•••• ${card.cardNumber.slice(-4)}` : "No card"}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </CardContent>
