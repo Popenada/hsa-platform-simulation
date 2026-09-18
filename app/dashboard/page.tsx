@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { HsaAccount, mockAccounts } from "@/lib/mock-accounts";
+import { HsaAccount } from "@/lib/mock-accounts";
 import { HsaCard } from "@/lib/mock-cards";
 import { Transaction } from "@/lib/mock-transactions";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -10,7 +10,7 @@ import AccountsList from "@/components/dashboard/AccountsList";
 import RecentTransactions from "@/components/dashboard/RecentTransactions";
 
 export default function DashboardPage() {
-  const [accounts, setAccounts] = useState<HsaAccount[]>(mockAccounts);
+  const [accounts, setAccounts] = useState<HsaAccount[]>([]);
   const [cards, setCards] = useState<Record<string, HsaCard>>({});
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 

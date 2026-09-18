@@ -15,7 +15,6 @@ export async function POST(request: Request) {
   }
 
   const { accountId, merchantCategory, amount } = result.data;
-  // 
   if (!isQualifiedExpense(merchantCategory)) {
     return NextResponse.json({
       status: "declined",
