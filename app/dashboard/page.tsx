@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useMemo, useState } from "react";
 import { HsaAccount, mockAccounts } from "@/lib/mock-accounts";
 import { HsaCard } from "@/lib/mock-cards";
 import { Transaction } from "@/lib/mock-transactions";
@@ -11,20 +10,9 @@ import AccountsList from "@/components/dashboard/AccountsList";
 import RecentTransactions from "@/components/dashboard/RecentTransactions";
 
 export default function DashboardPage() {
-  const router = useRouter();
-  const [username, setUsername] = useState<string | null>(null);
   const [accounts, setAccounts] = useState<HsaAccount[]>(mockAccounts);
   const [cards, setCards] = useState<Record<string, HsaCard>>({});
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-
-  useEffect(() => {
-    const user = localStorage.getItem("hsa_user");
-    if (!user) {
-      router.push("/login");
-    } else {
-      setUsername(user);
-    }
-  }, [router]);
 
   const moneyLeftToSpend = useMemo(
     () => accounts.reduce((sum, account) => sum + account.balance, 0),
@@ -57,13 +45,9 @@ export default function DashboardPage() {
     );
   }
 
-  if (!username) return null;
-
   return (
     <div className="flex flex-1 flex-col gap-6 bg-zinc-50 p-6 dark:bg-black">
-      <h1 className="text-xl font-semibold text-foreground">
-        Welcome, {username}
-      </h1>
+      <h1 className="text-xl font-semibold text-foreground">Dashboard</h1>
 
       <Card>
         <CardHeader className="items-center text-center">
