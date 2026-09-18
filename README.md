@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# HSA Platform
 
-## Getting Started
+A simulated Health Savings Account (HSA) platform: create accounts, deposit funds, issue virtual debit cards, and process transactions against a qualified-medical-expense check — with concurrency-safe balance handling. Built with Next.js (App Router) and Supabase.
 
-First, run the development server:
+See [architecture.md](architecture.md) for system design, data model, and concurrency handling, and [ai-usage.md](ai-usage.md) for how AI was used and verified during development.
+
+## Prerequisites
+
+- Node.js 22+
+- A free [Supabase](https://supabase.com) project
+
+## 1. Install dependencies
+
+```bash
+npm install
+```
+
+## 2. Set up the database
+
+1. Create a new Supabase project.
+2. Open the **SQL Editor** in your Supabase dashboard.
+3. Run the contents of [`supabase/schema.sql`](supabase/schema.sql) — this creates the `accounts`, `cards`, and `transactions` tables and the atomic `deposit_funds`, `process_transaction`, and `decline_transaction` functions that enforce the concurrency guarantees.
+
+## 3. Configure environment variables
+
+Create a `.env.local` file in the project root:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+```
+
+Both values are in your Supabase dashboard under **Project Settings → API**. Use the **`service_role`** (secret) key, not the `anon`/publishable one — the server needs it to write data without Row Level Security in place (see `architecture.md` for why).
+
+## 4. Run the app
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000). If port 3000 is already in use on your machine, Next.js will pick another port automatically — check the terminal output for the actual URL.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+There's no login — the app opens straight to the dashboard.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 5. Run the tests
 
-## Learn More
+```bash
+npm test
+```
 
-To learn more about Next.js, take a look at the following resources:
+This runs two suites:
+- **`lib/qualified-expense.test.ts`** — a pure unit test of the merchant-category classification logic, no server required.
+- **`tests/concurrent-transactions.test.ts`** — an integration test that fires real concurrent HTTP requests at your **running dev server** (started in step 4), proving the balance-safety guarantee against real Supabase. If your dev server isn't on port 3000, point the test at it:
+  ```bash
+  TEST_BASE_URL=http://localhost:3001 npm test
+  ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Demo Video
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+[Link to demo video] — TODO: add once recorded.
 
-## Deploy on Vercel
+## Tech Stack
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [Next.js 16](https://nextjs.org) (App Router) + React 19
+- [Supabase](https://supabase.com) (Postgres) for persistence
+- [Tailwind CSS](https://tailwindcss.com) + [shadcn/ui](https://ui.shadcn.com)
+- [Zod](https://zod.dev) for request validation
+- [Vitest](https://vitest.dev) for testing
