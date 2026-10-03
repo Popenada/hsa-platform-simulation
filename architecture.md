@@ -33,7 +33,7 @@ For a transaction, category is checked before balance: the route calls `isQualif
 
 ## Concurrency Handling
 
-The naive approach — `SELECT` balance in app code, compute the new value, `UPDATE` it back — has a race window: two concurrent requests can both read the same starting balance before either writes, and one silently overwrites the other (a "lost update").
+The naive approach: `SELECT` balance in app code, compute the new value, `UPDATE` it back has a race window: two concurrent requests can both read the same starting balance before either writes, and one silently overwrites the other.
 
 `deposit_funds` and `process_transaction` avoid this with a single atomic `UPDATE`, run inside Postgres:
 
@@ -43,13 +43,13 @@ set balance = balance - p_amount
 where id = p_account_id and balance >= p_amount
 ```
 
-The `WHERE balance >= p_amount` check happens as part of the same `UPDATE`, not a separate `SELECT` first. Postgres takes a **row lock** on the account for the duration — a second concurrent request against the same row physically waits for the first to commit, then re-checks its `WHERE` clause against the *just-updated* balance, not the stale value it started with.
+The `WHERE balance >= p_amount` check happens as part of the same `UPDATE`, not a separate `SELECT` first. Postgres takes a **row lock** on the account for the duration and a second concurrent request against the same row physically waits for the first to commit, then re-checks its `WHERE` clause against the *just-updated* balance, not the stale value it started with.
 
-Assignment's example, Balance $100 / A $80 / B $50, concurrent: whichever request commits first (say A) drops the balance to $20; the second (B) then re-checks `20 >= 50`, fails, updates zero rows, and gets recorded as `declined: Insufficient funds`. Order isn't guaranteed, but the outcome always is — exactly one succeeds, balance never goes negative.
+Assignment's example, Balance $100 / A $80 / B $50, concurrent: whichever request commits first (say A) drops the balance to $20; the second (B) then re-checks `20 >= 50`, fails, updates zero rows, and gets recorded as `declined: Insufficient funds`. Order isn't guaranteed, but the outcome always is exactly one, balance never goes negative.
 
 Card issuance uses the same idea via a different mechanism: a `UNIQUE` constraint on `cards.account_id`. Two concurrent "issue card" requests for one account — Postgres rejects the second with a `23505` error, so the database enforces the invariant, not app code.
 
-**Verified, not just trusted**: `tests/concurrent-transactions.test.ts` fires real concurrent requests at a running dev server + real Supabase, asserting the balance is *exactly* `starting − approvedAmount` — catching lost-update bugs a negative-balance check alone would miss.
+**Verified, not just trusted**: `tests/concurrent-transactions.test.ts` fires real concurrent requests at a running dev server + real Supabase, asserting the balance is *exactly* `starting − approvedAmount` catching lost-update bugs a negative-balance check alone would miss.
 
 ## Design Tradeoffs / Known Limitations
 
